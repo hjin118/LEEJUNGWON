@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>독서 학원 회원 관리 시스템</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <div class="header-title">
+        <h1>독서 학원 회원 관리</h1>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-primary" id="toggle-dashboard">대시보드</button>
+      </div>
+    </header>
+
+    <section id="dashboard-section" class="dashboard-section" style="display: none;">
+      <h2>대시보드</h2>
+      <div class="dashboard-stats">
+        <div class="dashboard-stat">
+          <div class="stat-icon">👥</div>
+          <div class="stat-info">
+            <div class="stat-label">총 회원 수</div>
+            <div class="stat-value" id="stat-total-members">0</div>
+          </div>
+        </div>
+        <div class="dashboard-stat">
+          <div class="stat-icon">📊</div>
+          <div class="stat-info">
+            <div class="stat-label">평균 출석률</div>
+            <div class="stat-value" id="stat-avg-attendance">0%</div>
+          </div>
+        </div>
+        <div class="dashboard-stat">
+          <div class="stat-icon">💰</div>
+          <div class="stat-info">
+            <div class="stat-label">미납 인원</div>
+            <div class="stat-value" id="stat-unpaid">0</div>
+          </div>
+        </div>
+        <div class="dashboard-stat">
+          <div class="stat-icon">📚</div>
+          <div class="stat-info">
+            <div class="stat-label">총 독서 권수</div>
+            <div class="stat-value" id="stat-total-books">0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-charts">
+        <div class="chart-card">
+          <h3>레벨별 인원</h3>
+          <div class="level-chart" id="level-chart"></div>
+        </div>
+        <div class="chart-card">
+          <h3>학년별 인원</h3>
+          <div class="grade-chart" id="grade-chart"></div>
+        </div>
+      </div>
+
+      <div class="dashboard-recent">
+        <h3>최근 상담</h3>
+        <div class="recent-list" id="recent-counseling"></div>
+      </div>
+    </section>
+
+    <section class="register-section">
+      <h2>회원 등록</h2>
+      <form id="register-form" class="register-form">
+        <div class="form-row">
+          <input type="text" id="reg-name" placeholder="이름" required>
+          <select id="reg-grade" required>
+            <option value="">학년 선택</option>
+            <option value="초1">초1</option>
+            <option value="초2">초2</option>
+            <option value="초3">초3</option>
+            <option value="초4">초4</option>
+            <option value="초5">초5</option>
+            <option value="초6">초6</option>
+            <option value="중1">중1</option>
+            <option value="중2">중2</option>
+            <option value="중3">중3</option>
+            <option value="고1">고1</option>
+            <option value="고2">고2</option>
+            <option value="고3">고3</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <input type="tel" id="reg-phone" placeholder="전화번호" required>
+          <select id="reg-level" required>
+            <option value="">레벨 선택</option>
+            <option value="1">레벨 1</option>
+            <option value="2">레벨 2</option>
+            <option value="3">레벨 3</option>
+            <option value="4">레벨 4</option>
+            <option value="5">레벨 5</option>
+            <option value="6">레벨 6</option>
+            <option value="7">레벨 7</option>
+            <option value="8">레벨 8</option>
+            <option value="9">레벨 9</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">회원 등록</button>
+      </form>
+    </section>
+
+    <main class="main-content">
+      <aside class="sidebar">
+        <div class="filter-section">
+          <input type="text" id="search-input" placeholder="이름/전화번호 검색">
+          
+          <div class="filter-group">
+            <label>레벨 필터</label>
+            <select id="filter-level">
+              <option value="">전체</option>
+              <option value="1">레벨 1</option>
+              <option value="2">레벨 2</option>
+              <option value="3">레벨 3</option>
+              <option value="4">레벨 4</option>
+              <option value="5">레벨 5</option>
+              <option value="6">레벨 6</option>
+              <option value="7">레벨 7</option>
+              <option value="8">레벨 8</option>
+              <option value="9">레벨 9</option>
+            </select>
+          </div>
+          
+          <div class="filter-group">
+            <label>학년 필터</label>
+            <select id="filter-grade">
+              <option value="">전체</option>
+              <option value="초1">초1</option>
+              <option value="초2">초2</option>
+              <option value="초3">초3</option>
+              <option value="초4">초4</option>
+              <option value="초5">초5</option>
+              <option value="초6">초6</option>
+              <option value="중1">중1</option>
+              <option value="중2">중2</option>
+              <option value="중3">중3</option>
+              <option value="고1">고1</option>
+              <option value="고2">고2</option>
+              <option value="고3">고3</option>
+            </select>
+          </div>
+
+          <div class="filter-options">
+            <label>
+              <input type="checkbox" id="filter-unpaid">
+              미납 회원만
+            </label>
+            <label>
+              <input type="checkbox" id="filter-no-books">
+              독서 기록 없음
+            </label>
+            <label>
+              <input type="checkbox" id="filter-low-comprehension">
+              이해도 낮음
+            </label>
+          </div>
+        </div>
+
+        <div class="member-list" id="member-list">
+          <div class="empty-message">회원이 없습니다</div>
+        </div>
+      </aside>
+
+      <section class="detail-section">
+        <div id="detail-content" class="detail-content">
+          <div class="empty-detail">회원을 선택하세요</div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
